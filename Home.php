@@ -1,3 +1,33 @@
+<?php
+ session_start();
+
+ 
+ if(isset($_SESSION['role'])) {  
+    
+    if($_SESSION['role'] == 'admin') { 
+        $hide = '';
+        $logoutHide = '';
+        if(!isset($_SESSION['alert_shown'])){
+            echo '<script>alert("You are logged in as ADMIN!");</script>';
+            $_SESSION['alert_shown'] = true;
+        }
+    }else { 
+        $hide = 'hide';
+        $logoutHide = '';
+        if(!isset($_SESSION['alert_shown'])){
+            echo '<script>alert("You are logged in as USER!");</script>';
+            $_SESSION['alert_shown'] = true;
+        }
+    }
+ }else { 
+    $hide = 'hide';
+    $logoutHide = 'hide'; 
+ }
+
+ $conn=mysqli_connect("localhost","root","","services");
+ $sql="SELECT * from sherbimet";
+ $all_products=$conn->query($sql);
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -5,6 +35,16 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Home</title>
+    <style>
+        .hide{
+            display: none;
+        }
+        .logoutHide{
+            display: none;
+        }
+
+
+    </style>
     
     <!-- Swiper css link-->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@8/swiper-bundle.min.css"/>
@@ -21,13 +61,16 @@
 <body>
     <!-- Header section start -->
     <section class="header">
-        <a href="Home.html" class="logo">Travel.</a>
+        <a href="Home.php" class="logo">Travel.</a>
 
         <nav class="navbar">
-            <a href="Home.html">Home</a>
-            <a href="About.html">About</a>
-            <a href="Package.html">Package</a>
-            <a href="Book.html">R&B</a>
+            <a href="Home.php">Home</a>
+            <a href="About.php">About</a>
+            <a href="Package.php">Package</a>
+            <a href="Book.php">R&B</a>
+            <a href="Places.php">toVisit</a>
+            <a href="Dashboard.php" class="<?=$hide?> " id="dashboard" >Dashboard</a>
+            <a href="Logout.php" class="<?=$logoutHide?>" id="logout">LogOut</a>
             <a href="#"><div id="login-btn" class="fas fa-user"></div></a>
         </nav>
 
@@ -38,19 +81,19 @@
     <!-- Log in form starts-->
 <div class="login-form-container">
     <div id="close-login-btn" class="fas fa-times"></div>
-    <form action="">
+    <form action="LoginValidation.php" method="post">
         <h3>sign in</h3>
         <span>username</span>
-        <input type="text" name="" class="box" placeholder="enter your email" id="email">
+        <input type="text" name="username" class="box" placeholder="enter your username" id="username">
         <span>password</span>
-        <input type="password" name="" class="box" placeholder="enter your password" id="password">
+        <input type="password" name="password" class="box" placeholder="enter your password" id="password">
         <div class="checkbox">
             <input type="checkbox" name="" id="remember-me">
             <label for="remember-me"> remember me</label>
         </div>
-        <input type="button" value="login" class="btn" onclick="validoLogIn()">
+        <input type="submit" value="login" name="loginBtn" class="btn" onclick="validoLogIn()">
         <p>forget password ? <a href="#">click here</a></p>
-        <p>don't have an account ? <a href="Book.html">create one</a></p>
+        <p>don't have an account ? <a href="Book.php">create one</a></p>
     </form>
  </div>
  <!-- Log in form ends-->
@@ -63,7 +106,7 @@
                     <div class="content">
                     <span>Explore, discover ,travel</span>
                     <h3>Travel around the world</h3>
-                    <a href="Package.html" class="btn">Discover more</a>
+                    <a href="Package.php" class="btn">Discover more</a>
                 </div>
                 </div>
 
@@ -71,7 +114,7 @@
                     <div class="content">
                     <span>Explore, discover ,travel</span>
                     <h3>Discover the new places</h3>
-                    <a href="Package.html" class="btn">Discover more</a>
+                    <a href="Package.php" class="btn">Discover more</a>
                 </div>
                 </div>
 
@@ -79,7 +122,7 @@
                     <div class="content">
                     <span>Explore, discover ,travel</span>
                     <h3>Make your tour worthwhile</h3>
-                    <a href="Package.html" class="btn">Discover more</a>
+                    <a href="Package.php" class="btn">Discover more</a>
                 </div>
                 </div>
 
@@ -97,36 +140,16 @@
     <h1 class="heading-title">Our Services</h1>
 
     <div class="box-container">
-
+        <?php
+            while($row=mysqli_fetch_assoc($all_products)){
+        ?>
         <div class="box">
-            <img src="./Fotot/icon-2.png">
-            <h3>Adventure</h3>
+            <img src="<?php echo $row["sherbimi_image"] ?>">
+            <h3><?php echo $row["sherbimi_emri"] ?></h3>
         </div>
-
-        <div class="box">
-            <img src="./Fotot/icon-1.png">
-            <h3>Tour guide</h3>
-        </div>
-
-        <div class="box">
-            <img src="./Fotot/icon-3.png">
-            <h3>Trekking</h3>
-        </div>
-
-        <div class="box">
-            <img src="./Fotot/icon-4.png">
-            <h3>Camp fire</h3>
-        </div>
-
-        <div class="box">
-            <img src="./Fotot/icon-5.png">
-            <h3>Off Road</h3>
-        </div>
-
-        <div class="box">
-            <img src="./Fotot/icon-6.png">
-            <h3>Camping</h3>
-        </div>
+        <?php
+            }
+        ?>
     </div>
 </div>
 <!-- Services section ends -->
@@ -144,7 +167,7 @@
                  Aut voluptas quas, incidunt minus mollitia a
                  spernatur repudiandae quidem.
                 </p>
-                 <a href="About.html" class="btn">Read more</a> 
+                 <a href="About.php" class="btn">Read more</a> 
           </div>
         </section>
     <!-- Home about section ends -->
@@ -162,7 +185,7 @@
                     <div class="content">
                         <h3>Adventure & Tour</h3>
                         <p>Lorem ipsum dolor sit,amet consectetur adisindjsngkdjsgskdg,Eos,sint!</p>
-                        <a href="Book.html" class="btn">Book now</a>
+                        <a href="Book.php" class="btn">Book now</a>
                     </div>
                 </div>
                 <div class="box">
@@ -172,7 +195,7 @@
                     <div class="content">
                         <h3>Adventure & Tour</h3>
                         <p>Lorem ipsum dolor sit,amet consectetur adisindjsngkdjsgskdg,Eos,sint!</p>
-                        <a href="Book.html" class="btn">Book now</a>
+                        <a href="Book.php" class="btn">Book now</a>
                     </div>
                 </div>
                 <div class="box">
@@ -182,12 +205,12 @@
                     <div class="content">
                         <h3>Adventure & Tour</h3>
                         <p>Lorem ipsum dolor sit,amet consectetur adisindjsngkdjsgskdg,Eos,sint!</p>
-                        <a href="Book.html" class="btn">Book now</a>
+                        <a href="Book.php" class="btn">Book now</a>
                     </div>
                 </div>
             </div>
 
-            <div class="load-more"><a href="Package.html" class="btn">Më shumë</a></div>
+            <div class="load-more"><a href="Package.php" class="btn">Më shumë</a></div>
         </section>
     <!-- Home packages section ends-->
 
@@ -200,7 +223,7 @@
                     saepe quod delectus veniam! Deserunt qui 
                     voluptas doloribus officiis eligendi, voluptates
                     ad. At cumque distinctio tempore consequuntur sit nihil explicabo.</p>
-                    <a href="Book.html" class="btn">Book now</a>
+                    <a href="Book.php" class="btn">Book now</a>
             </div>
         </section>
     <!-- Home offer section ends-->
@@ -212,10 +235,10 @@
 
             <div class="box">
              <h3>Quick Links</h3>
-            <a href="/Home.html"> <i class="fas fa-angle-right"></i> Home</a>
-            <a href="/About.html"> <i class="fas fa-angle-right"></i> About</a>
-            <a href="/Package.html"> <i class="fas fa-angle-right"></i> Package</a>
-            <a href="/Book.html"> <i class="fas fa-angle-right"></i> Book</a>
+            <a href="/Home.php"> <i class="fas fa-angle-right"></i> Home</a>
+            <a href="/About.php"> <i class="fas fa-angle-right"></i> About</a>
+            <a href="/Package.php"> <i class="fas fa-angle-right"></i> Package</a>
+            <a href="/Book.php"> <i class="fas fa-angle-right"></i> Book</a>
             </div>
             
             <div class="box">
@@ -255,4 +278,8 @@
     <!--Custom js file link-->
     <script src="script.js"></script>
 </body>
+
 </html>
+<?php
+ //}
+ ?>
