@@ -1,4 +1,25 @@
+<?php
+ session_start();
 
+ 
+ if(isset($_SESSION['role'])) {  
+    
+    if($_SESSION['role'] == 'admin') { 
+        $hide = '';
+        $logoutHide = '';
+    }else { 
+        $hide = 'hide';
+        $logoutHide = '';
+    }
+ }else { 
+    $hide = 'hide';
+    $logoutHide = 'hide'; 
+ }
+
+ $conn=mysqli_connect("localhost","root","","about");
+ $sql="SELECT * from reviews";
+ $all_products=$conn->query($sql);
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -6,6 +27,16 @@
    <meta http-equiv="X-UA-Compatible" content="IE=edge">
    <meta name="viewport" content="width=device-width, initial-scale=1.0">
    <title>About</title>
+   <style>
+       .hide{
+            display: none;
+        }
+        .logoutHide{
+            display: none;
+        }
+
+
+   </style>
 
    <!-- swiper css link  -->
    <link rel="stylesheet" href="https://unpkg.com/swiper@7/swiper-bundle.min.css" />
@@ -25,13 +56,16 @@
 
 <section class="header">
 
-   <a href="Home.html" class="logo">travel.</a>
+   <a href="Home.php" class="logo">travel.</a>
 
    <nav class="navbar">
-      <a href="home.html">home</a>
-      <a href="about.html">about</a>
-      <a href="package.html">package</a>
-      <a href="book.html">R&B</a>
+      <a href="home.php">home</a>
+      <a href="about.php">about</a>
+      <a href="package.php">package</a>
+      <a href="book.php">R&B</a>
+      <a href="Places.php">toVisit</a>
+      <a href="Dashboard.php" class="<?=$hide?>" >Dashboard</a>
+      <a href="Logout.php" class="<?=$logoutHide?>">LogOut</a>
       <a href="#"><div id="login-btn" class="fas fa-user"></div></a>
    </nav>
 
@@ -43,22 +77,22 @@
 
 <!-- Log in form starts-->
 <div class="login-form-container">
-   <div id="close-login-btn" class="fas fa-times"></div>
-   <form action="">
-       <h3>sign in</h3>
-       <span>username</span>
-       <input type="email" name="" class="box" placeholder="enter your email" id="email">
-       <span>password</span>
-       <input type="password" name="" class="box" placeholder="enter your password" id="password">
-       <div class="checkbox">
-           <input type="checkbox" name="" id="remember-me">
-           <label for="remember-me"> remember me</label>
-       </div>
-       <input type="button" value="login" class="btn" onclick="validoLogIn()">
-       <p>forget password ? <a href="Book.html">click here</a></p>
-       <p>don't have an account ? <a href="Book.html">create one</a></p>
-   </form>
-</div>
+    <div id="close-login-btn" class="fas fa-times"></div>
+    <form action="LoginValidation.php" method="post">
+        <h3>sign in</h3>
+        <span>username</span>
+        <input type="text" name="username" class="box" placeholder="enter your username" id="username">
+        <span>password</span>
+        <input type="password" name="password" class="box" placeholder="enter your password" id="password">
+        <div class="checkbox">
+            <input type="checkbox" name="" id="remember-me">
+            <label for="remember-me"> remember me</label>
+        </div>
+        <input type="submit" value="login" name="loginBtn" class="btn" onclick="validoLogIn()">
+        <p>forget password ? <a href="#">click here</a></p>
+        <p>don't have an account ? <a href="Book.php">create one</a></p>
+    </form>
+ </div>
 <!-- Log in form ends-->
 
 <div class="heading" style="background:url(Fotot/header-bg-1.png) no-repeat">
@@ -106,7 +140,9 @@
    <div class="swiper reviews-slider">
 
       <div class="swiper-wrapper">
-
+      <?php
+               while($row=mysqli_fetch_assoc($all_products)){
+            ?>
          <div class="swiper-slide slide">
             <div class="stars">
                <i class="fas fa-star"></i>
@@ -115,96 +151,20 @@
                <i class="fas fa-star"></i>
                <i class="fas fa-star"></i>
             </div>
-            <p>Lorem, ipsum dolor sit amet consectetur adipisicing elit. Minus facilis laudantium magnam saepe magni ullam possimus laborum voluptas, veniam ipsum officiis quae doloribus minima ut quis. Molestiae qui distinctio possimus?</p>
-            <h3>john deo</h3>
+            <p><?php echo $row["review_description"] ?></p>
+            <h3><?php echo $row["review_client"] ?></h3>
             <span>traveler</span>
-            <img src="Fotot/pic-1.png" alt="">
+            <img src="<?php echo $row["review_image"] ?>" alt="">
          </div>
-
-         <div class="swiper-slide slide">
-            <div class="stars">
-               <i class="fas fa-star"></i>
-               <i class="fas fa-star"></i>
-               <i class="fas fa-star"></i>
-               <i class="fas fa-star"></i>
-            </div>
-            <p>Lorem ipsum, dolor sit amet consectetur adipisicing elit. Accusamus repellendus et suscipit optio similique totam aut laborum ullam sequi! In!</p>
-            <h3>john deos</h3>
-            <span>traveler</span>
-            <img src="Fotot/pic-2.png" alt="">
-         </div>
-
-         <div class="swiper-slide slide">
-            <div class="stars">
-               <i class="fas fa-star"></i>
-               <i class="fas fa-star"></i>
-               <i class="fas fa-star"></i>
-            </div>
-            <p>Lorem, ipsum dolor sit amet consectetur adipisicing elit. Voluptatibus enim deserunt, ab at ea iste odio placeat doloribus eum dolores tempore obcaecati, dolore esse aperiam. Excepturi ad quo distinctio, dignissimos voluptate, dolores, saepe animi eum atque sint esse ab exercitationem!</p>
-            <h3>john deo</h3>
-            <span>traveler</span>
-            <img src="Fotot/pic-3.png" alt="">
-         </div>
-
-         <div class="swiper-slide slide">
-            <div class="stars">
-               <i class="fas fa-star"></i>
-               <i class="fas fa-star"></i>
-               <i class="fas fa-star"></i>
-               <i class="fas fa-star"></i>
-               <i class="fas fa-star"></i>
-            </div>
-            <p>Lorem, ipsum dolor sit amet consectetur adipisicing elit. Possimus recusandae cum quibusdam odio dignissimos nemo?</p>
-            <h3>john deo</h3>
-            <span>traveler</span>
-            <img src="Fotot/pic-4.png" alt="">
-         </div>
-
-         <div class="swiper-slide slide">
-            <div class="stars">
-               <i class="fas fa-star"></i>
-               <i class="fas fa-star"></i>
-               <i class="fas fa-star"></i>
-            </div>
-            <p>Lorem, ipsum dolor sit amet consectetur adipisicing elit. Minus facilis laudantium magnam saepe magni ullam possimus laborum voluptas, veniam ipsum officiis quae doloribus minima ut quis. Molestiae qui distinctio possimus?</p>
-            <h3>john deo</h3>
-            <span>traveler</span>
-            <img src="Fotot/pic-5.png" alt="">
-         </div>
-
-         <div class="swiper-slide slide">
-            <div class="stars">
-               <i class="fas fa-star"></i>
-               <i class="fas fa-star"></i>
-               <i class="fas fa-star"></i>
-               <i class="fas fa-star"></i>
-            </div>
-            <p>Lorem, ipsum dolor sit amet consectetur adipisicing elit. Minus facilis laudantium magnam saepe magni ullam possimus laborum voluptas, veniam ipsum officiis quae doloribus minima ut quis. Molestiae qui distinctio possimus?</p>
-            <h3>john deo</h3>
-            <span>traveler</span>
-            <img src="Fotot/pic-6.png" alt="">
-         </div>
-
+         <?php
+               }
+      ?>
       </div>
-
    </div>
 
 </section>
 
 <!-- reviews section ends -->
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 <!-- footer section starts  -->
@@ -255,12 +215,6 @@
 
 
 
-
-
-
-
-
-
 <!-- swiper js link  -->
 <script src="https://unpkg.com/swiper@7/swiper-bundle.min.js"></script>
 
@@ -268,3 +222,7 @@
 <script src="script.js"></script>
 
 </body>
+
+<?php
+ //}
+ ?>
