@@ -62,33 +62,21 @@ var swiper = new Swiper(".reviews-slider", {
   }
   
 
-  function validate(){
+  
+
+  function validoBook(){
     var emri=document.getElementById("name").value;
     var regex=/^[a-zA-Z]{3,}$/
-
     if(emri.trim()==""){
-      alert("Shkruaj emrin: ");
-    }
-    else if((regex.test(emri))){
-      alert("Emri pranohet");
-    }
-    else{
-      alert("Emri nuk pranohet");
-    }
-
-    var emaili=document.getElementById("email").value;
-    var regex=/^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/
-
-    if(emaili.trim()==""){
-      alert("Shkruaj nje email: ");
-    }
-    else if((regex.test(emaili))){
-      alert("Email pranohet");
-    }
-    else{
-        alert("Email nuk pranohet");
-    }
-
+          alert("Shkruaj emrin: ");
+        }
+        else if((regex.test(emri))){
+          alert("Emri pranohet");
+        }
+        else{
+          alert("Emri nuk pranohet");
+        }
+    
     var numri=document.getElementById("nrtel").value;
     var regex =/^0+4+[3-5 | 8-9]+[0-9]{6}$/
 
@@ -103,19 +91,6 @@ var swiper = new Swiper(".reviews-slider", {
       alert("Numri i telefonit nuk pranohet");
   }
 
-   var adresa=document.getElementById("address").value;
-   var regex=/^[a-zA-Z]+ [a-zA-Z]+,[0-9]{5}$/
-
-   if(adresa.trim()==""){
-    alert("Shkruaj adresen ");
-   }
-   else if((regex.test(adresa))){
-    alert("Adresa pranohet");
-   }
-   else{
-    alert("Adresa nuk pranohet");
-   }
-
    var lokacioni=document.getElementById("location").value;
    var regex=/[A-Za-z]/
 
@@ -128,6 +103,7 @@ var swiper = new Swiper(".reviews-slider", {
    else{
     alert("Lokacioni nuk pranohet");
    }
+
 
    var persona=document.getElementById("persona").value;
    var regex=/[1-9][0-9]/
@@ -145,17 +121,17 @@ var swiper = new Swiper(".reviews-slider", {
 
 
   function validoLogIn(){
-    var emaili=document.getElementById("email").value;
-    var regex=/^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/
+    var username=document.getElementById("username").value;
+    var regex=/^[a-zA-Z0-9._-]/
   
-    if(emaili.trim()==""){
-      alert("Ploteso fushen per  email: ");
+    if(username.trim()==""){
+      alert("Ploteso fushen per  username: ");
     }
-    else if((regex.test(emaili))){
-      alert("Email pranohet");
+    else if((regex.test(username))){
+      alert("Username pranohet");
     }
     else{
-        alert("Email nuk pranohet");
+        alert("Username nuk pranohet");
     }
   
     var passwordi=document.getElementById("password").value;
@@ -172,4 +148,3 @@ var swiper = new Swiper(".reviews-slider", {
     }
   
   }
-
