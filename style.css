@@ -396,6 +396,7 @@ section{
     padding: 1rem 0;
 }
 
+/*----------------------------------*/
 .packages .box-container{
     display: grid;
     grid-template-columns: repeat(auto-fit,minmax(30rem,1fr));
@@ -451,6 +452,10 @@ section{
     text-align: center;
     margin-top: 2rem;
 }
+
+
+
+/*--------------------------*/
 
 .about{
     display: flex;
@@ -556,8 +561,6 @@ section{
     border-radius: 50%;
     margin-top: 1rem;
  }
-
-
  
  
  
@@ -606,6 +609,7 @@ section{
     margin-left: 530px;
  }
  
+
 .footer{
     background: url(./Fotot/footer-bg.jpg) no-repeat;
     background-size: cover;
@@ -690,13 +694,21 @@ section{
     color: var(--black);
 }
 
-
+/*media queries*/
 
 @media (max-width:1200px){
 
     section{
         padding: 3rem 5%;
     }
+    
+    #dashboard{
+        display: none;
+     }
+     
+     #logout{
+        display: none;
+     }
 }
 
 @media (max-width:991px){
@@ -712,6 +724,14 @@ section{
     .home .slide .content h3{
         font-size: 10vw;
     }
+
+    #dashboard{
+        display: none;
+     }
+     
+     #logout{
+        display: none;
+     }
 }
 @media (max-width:768px){
     #menu-btn{
@@ -743,6 +763,14 @@ section{
         margin: 2rem;
         text-align: center;
      }
+
+     #dashboard{
+        display: none;
+     }
+
+     #logout{
+        display: none;
+     }
 }
 
 @media (max-width:450px){
@@ -755,13 +783,14 @@ section{
         font-size: 3.5rem;
     }
 
+    #dashboard{
+        display: none;
+     }
+     
+     #logout{
+        display: none;
+     }
+
 
 
 }
-
-
-
-
-
-
-
