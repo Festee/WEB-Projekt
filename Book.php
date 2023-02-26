@@ -1,3 +1,24 @@
+<?php
+ session_start();
+
+ 
+ if(isset($_SESSION['role'])) {  
+    
+    if($_SESSION['role'] == 'admin') { 
+        $hide = '';
+        $logoutHide = '';
+    }else { 
+        $hide = 'hide';
+        $logoutHide = '';
+    }
+ }else { 
+    $hide = 'hide';
+    $logoutHide = 'hide'; 
+ }
+
+ $db=mysqli_connect("localhost","root","","klientet");
+ 
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -5,6 +26,16 @@
    <meta http-equiv="X-UA-Compatible" content="IE=edge">
    <meta name="viewport" content="width=device-width, initial-scale=1.0">
    <title>Booking</title>
+   <style>
+        .hide{
+            display: none;
+        }
+        .logoutHide{
+            display: none;
+        }
+
+
+    </style>
 
    <!-- swiper css link  -->
    <link rel="stylesheet" href="https://unpkg.com/swiper@7/swiper-bundle.min.css" />
@@ -23,13 +54,16 @@
 
 <section class="header">
 
-   <a href="Home.html" class="logo">travel.</a>
+   <a href="Home.php" class="logo">travel.</a>
 
    <nav class="navbar">
-      <a href="home.html">home</a>
-      <a href="about.html">about</a>
-      <a href="package.html">package</a>
-      <a href="book.html">R&B</a>
+      <a href="home.php">home</a>
+      <a href="about.php">about</a>
+      <a href="package.php">package</a>
+      <a href="book.php">R&B</a>
+      <a href="Places.php">toVisit</a>
+      <a href="Dashboard.php" class="<?=$hide?>" >Dashboard</a>
+      <a href="Logout.php" class="<?=$logoutHide?>">LogOut</a>
       <a href="#"><div id="login-btn" class="fas fa-user"></div></a>
    </nav>
 
@@ -41,22 +75,22 @@
 
 <!-- Log in form starts-->
 <div class="login-form-container">
-   <div id="close-login-btn" class="fas fa-times"></div>
-   <form action="">
-       <h3>sign in</h3>
-       <span>username</span>
-       <input type="email" name="" class="box" placeholder="enter your email" id="email">
-       <span>password</span>
-       <input type="password" name="" class="box" placeholder="enter your password" id="password">
-       <div class="checkbox">
-           <input type="checkbox" name="" id="remember-me">
-           <label for="remember-me"> remember me</label>
-       </div>
-       <input type="button" value="login" class="btn" onclick="validoLogIn()">
-       <p>forget password ? <a href="#">click here</a></p>
-       <p>don't have an account ? <a href="Book.html">create one</a></p>
-   </form>
-</div>
+    <div id="close-login-btn" class="fas fa-times"></div>
+    <form action="LoginValidation.php" method="post">
+        <h3>sign in</h3>
+        <span>username</span>
+        <input type="text" name="username" class="box" placeholder="enter your username" id="username">
+        <span>password</span>
+        <input type="password" name="password" class="box" placeholder="enter your password" id="password">
+        <div class="checkbox">
+            <input type="checkbox" name="" id="remember-me">
+            <label for="remember-me"> remember me</label>
+        </div>
+        <input type="submit" value="login" name="loginBtn" class="btn" onclick="validoLogIn()">
+        <p>forget password ? <a href="#">click here</a></p>
+        <p>don't have an account ? <a href="Book.php">create one</a></p>
+    </form>
+ </div>
 <!-- Log in form ends-->
 
 <div class="heading" style="background:url(Fotot/header-bg-3.png) no-repeat">
@@ -69,44 +103,36 @@
 
    <h1 class="heading-title">Register & book your trip!</h1>
 
-   <form action="book_form.php" method="post" class="book-form">
+   <form method="post" class="book-form">
 
       <div class="flex">
          <div class="inputBox">
             <span>name :</span>
-            <input type="text" placeholder="enter your name" name="name" id="name">
-         </div>
-         <div class="inputBox">
-            <span>email :</span>
-            <input type="email" placeholder="enter your email" name="email" id="email">
+            <input type="text" placeholder="enter your name" name="emri" id="name">
          </div>
          <div class="inputBox">
             <span>phone :</span>
-            <input type="text" placeholder="enter your number" name="phone" id="nrtel">
-         </div>
-         <div class="inputBox">
-            <span>address :</span>
-            <input type="text" placeholder="enter your address" name="address" id="address">
+            <input type="text" placeholder="enter your number" name="nrtel" id="nrtel">
          </div>
          <div class="inputBox">
             <span>where to :</span>
-            <input type="text" placeholder="place you want to visit" name="location" id="location">
+            <input type="text" placeholder="place you want to visit" name="destinacioni" id="location">
          </div>
          <div class="inputBox">
             <span>how many :</span>
-            <input type="text" placeholder="number of guests" name="guests" id="persona">
+            <input type="text" placeholder="number of guests" name="persona" id="persona">
          </div>
          <div class="inputBox">
-            <span>arrivals :</span>
-            <input type="date" name="arrivals">
+            <span>Nisja :</span>
+            <input type="date" name="nisja">
          </div>
          <div class="inputBox">
-            <span>leaving :</span>
-            <input type="date" name="leaving">
+            <span>Arritja :</span>
+            <input type="date" name="arritja">
          </div>
       </div>
 
-      <input type="button" value="submit" class="btn" name="send" onclick="validate()"> 
+      <input onclick="validoBook()" type="submit" value="Submit" class="btn" name="submit" > 
 
    </form>
 
@@ -168,3 +194,25 @@
 
 </body>
 </html>
+<?php
+ if(isset($_POST['submit'])){
+   $emri=$_POST['emri'];
+   $nrtel=$_POST['nrtel'];
+   $destinacioni=$_POST['destinacioni'];
+   $persona=$_POST['persona'];
+   $nisja=$_POST['nisja'];
+   $arritja=$_POST['arritja'];
+
+   $qry="INSERT INTO klienti values(null,'$emri','$nrtel','$destinacioni','$persona','$nisja','$arritja')";
+ }
+
+
+
+ if(mysqli_query($db,$qry)){
+   echo '<script>aler("USer registered successfully.");</script>';
+   header('location:Book.php');
+ }
+ else{
+   echo mysqli_error($db);
+ }
+ ?>
